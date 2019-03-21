@@ -1,4 +1,3 @@
-
 #include <map>
 #include <iostream>
 #include "Purchases.h"
@@ -9,6 +8,10 @@
 #include <string>
 #include <list>
 
+/*
+Provides a check to make sure that the string can be changed into
+a float. Returns false if not possible.
+*/
 bool Purchases::SafeFloatFromString(std::string &input, float &v)
 {
 	bool returnValue = true;
@@ -24,6 +27,9 @@ bool Purchases::SafeFloatFromString(std::string &input, float &v)
 	return returnValue;
 }
 
+/*
+Sets all given strings to known strings in Purchase class to create a Purchase type variable.
+*/
 Purchases::Purchases(std::string id, std::string invoice, std::string date, float amout)
 {
 	this->id = id;
@@ -31,6 +37,14 @@ Purchases::Purchases(std::string id, std::string invoice, std::string date, floa
 	this->date = date;
 	this->amount = amount;
 }
+
+/*
+Reads in given file and separates by lines in file. Utilizes Split constructor
+to parse by delimeter. Utilizes SafeFloatFromString() to ensure float
+variables can be used. Creates Purchases to be added onto a list of Purchases.
+Adds ID and Purchase amount into multimap.
+Only returns true if full function carries out. Otherwise, returns false.
+*/
 bool Purchases::LoadPurchase(std::multimap<std::string, float> &ptable, const std::string filename, bool verbose)
 {
 	std::ifstream infile(filename);
@@ -39,6 +53,7 @@ bool Purchases::LoadPurchase(std::multimap<std::string, float> &ptable, const st
 	if (infile.is_open())
 	{
 		std::string line;
+		std::string delim = ",";
 
 		while (getline(infile, line))
 		{
@@ -49,14 +64,12 @@ bool Purchases::LoadPurchase(std::multimap<std::string, float> &ptable, const st
 				continue;
 			}
 
-			Split(&space, &line);
+			Split(space, line, delim);
 
 			std::string badge = space.at(0);
 			std::string check = space.at(1);
 			std::string duration = space.at(2);
 			float number = 0.0;
-
-			std::cout << "Got to line 58." << std::endl;
 
 			if (SafeFloatFromString(space.at(3), number))
 			{
@@ -70,7 +83,7 @@ bool Purchases::LoadPurchase(std::multimap<std::string, float> &ptable, const st
 
 			Purchases p = Purchases(badge, check, duration, number);
 
-			pod.push_back(p);
+			pod.push_back(p); 
 		}
 	}
 	else

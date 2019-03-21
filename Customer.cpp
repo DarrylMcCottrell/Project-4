@@ -1,4 +1,3 @@
-
 #include <iostream>
 #include "Customer.h"
 #include "Split.h"
@@ -27,6 +26,7 @@ bool Customer::LoadCustomers(std::map<std::string, Customer> &CInfo, const std::
 	if (infile1.is_open())
 	{
 		std::string line;
+		std::string delim = ",";
 
 		while (getline(infile1, line))
 		{
@@ -37,7 +37,7 @@ bool Customer::LoadCustomers(std::map<std::string, Customer> &CInfo, const std::
 				continue;
 			}
 
-			Split(&CustomerInfo, &line);
+			Split(CustomerInfo, line, delim);
 
 			std::string ID = CustomerInfo.at(0);
 			std::string NAME = CustomerInfo.at(1);
